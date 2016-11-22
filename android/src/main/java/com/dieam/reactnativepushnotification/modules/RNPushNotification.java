@@ -61,9 +61,16 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
     public void onNewIntent(Intent intent) {
         if (intent.hasExtra("notification")) {
             Bundle bundle = intent.getBundleExtra("notification");
-            bundle.putBoolean("foreground", false);
-            intent.putExtra("notification", bundle);
-            mJsDelivery.notifyNotification(bundle);
+            if (bundle != null) {
+              bundle.putBoolean("foreground", false);
+              intent.putExtra("notification", bundle);
+              mJsDelivery.notifyNotification(bundle);
+            } else if ( intent.getExtras() != null ) {
+              bundle = intent.getExtras();
+              bundle.putBoolean("foreground", false);
+              intent.putExtra("notification", bundle);
+              mJsDelivery.notifyNotification(bundle);
+            }
         }
     }
 
